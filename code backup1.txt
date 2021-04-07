@@ -1,0 +1,120 @@
+//line cover on function
+function lineCoverOn (){
+	root.line_cover_1.visible = true;
+	root.line_cover_2.visible = true;
+	root.line_cover_3.visible = true;
+	root.line_cover_6.visible = true;
+	root.line_cover_8.visible = true;
+	
+}
+function lineCoverOff (){
+	root.line_cover_1.visible = false;
+	root.line_cover_2.visible = false;
+	root.line_cover_3.visible = false;
+	root.line_cover_6.visible = false;
+	root.line_cover_8.visible = false;
+}
+
+function mainEvent1(){
+	//on start of program
+	root.line_cover_1.visible = false;
+	root.line_cover_2.visible = false;
+	root.line_cover_3.visible = false;
+	root.line_cover_4.visible = false;
+	root.line_cover_5.visible = false;
+	root.line_cover_6.visible = true;
+	root.line_cover_8.visible = true;
+	root.dot_path3.visible = false;
+	root.dot_path4.visible = false;
+	root.dot_path5.visible = false;
+	root.dot_path6.visible = false;
+	root.dot_path8.visible = false;
+	charging();
+	function checkCharging(){
+		//switching power to mains
+		if ( charge>90 ){
+			root.line_cover_4.visible = true;
+			root.line_cover_5.visible = true;
+			root.line_cover_6.visible = false;
+			root.line_cover_8.visible = false;
+			//increasing power_l bar
+			root.power_L.alpha = 1
+			root.power_L.scaleX  = 0.1 * dialMem;
+			clearInterval(stopCharging);
+		}
+	}
+	var stopCharging = setInterval(checkCharging, 100);
+	
+	
+	//monitoring powerL bar
+	function powerBarL(){
+		if (lineVal == 1 && lineSwitch == 0 && chargerVal == 1 && charge>90){
+			root.power_L.scaleX  = 0.1 * dialMem;;
+		}
+		else {
+			root.power_L.scaleX  = 0;
+		}
+	}
+	setInterval(powerBarL, 100);
+	
+	//monitoring dialMem zero
+	function zeroDialMem (){
+		if (dialMem==1&&charge<90&&lineVal==1){
+			root.line_cover_3.visible = true;
+			root.line_cover_6.visible = false;
+			root.line_cover_8.visible = false;
+			root.dot_path6.visible = true;
+			root.dot_path8.visible = true;
+			root.dot_path6_rev.visible = false;
+			root.dot_path8_rev.visible = false;
+			root.power_R.alpha = 1;
+			root.power_R.scaleX = 0.2;
+			root.power_L.scaleX = 0;
+			
+			
+		}
+		else if (dialMem==1&&charge>90&&lineVal==1){
+			root.line_cover_6.visible = true;
+			root.line_cover_8.visible = true;
+			root.power_R.scaleX = 0;
+			root.power_L.scaleX = 0;
+		}
+		else if (dialMem>1&&charge>90&&lineVal==1){
+			if (lineSwitch==0){
+				root.line_cover_3.visible = false;
+				root.line_cover_6.visible = false;
+				root.line_cover_8.visible = false;
+				root.noti_cannot.visible = false;
+				root.notification.visible = false;
+				lineCoverOff();
+			}
+			else if (lineSwitch ==1){
+				root.noti_cannot.visible = true;
+				root.notification.visible = true;
+				lineCoverOn();
+			}
+		}
+		else if (dialMem==1&&charge>90&&lineVal==1&&lineSwitch==1){
+			root.noti_cannot.visible = false;
+			root.notification.visible = false;
+		}
+		
+		
+		
+		
+	}
+	setInterval(zeroDialMem,100);
+	
+}
+mainEvent1();
+
+
+/*this.converter.addEventListener("click", stopStartAnim.bind(this));
+
+function stopStartAnim() {
+
+    var clip = this.batt_charge;
+
+    clip[clip.paused ? "play" : "stop"]();
+
+}*/
